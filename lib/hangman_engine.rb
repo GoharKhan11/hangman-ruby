@@ -34,22 +34,21 @@ class HangmanGame
     
     end
 
-    def get_guess_word
-        # nil -> str
-        # Returns the word being guessed
-
-        @guess_word.join("")
-    end
-
     def add_guess (guess_letter)
         # str -> nil
         # Takes a letter being guessed and adds it to the guessed letters.
         # If the letter is correct it updates the guess board with the correct letters.
-        # Note: letters already guessed raise an error
+        # Warning: letters already guessed raise an error
+        # Warning: if the guess word is an empty string returns an error
 
+        guess_letter.downcase!
         # If the guess word is an empty string raise an error
         if @guess_word.length == 0
             raise InvalidWordError.new("the word is an empty string")
+        end
+
+        if is_single_letter?(guess_letter)
+            raise InvalidEntryError.new("This is not a valid entry, please enter a letter")
         end
 
         # If the letter hasn't been used, apply the guess
@@ -67,6 +66,13 @@ class HangmanGame
 
     end
 
+    def get_guess_word
+        # nil -> str
+        # Returns the word being guessed
+
+        @guess_word.join("")
+    end
+
     def get_guesses ()
         # nil -> str
         # Returns a string of the letters used so far in the game.
@@ -78,6 +84,35 @@ class HangmanGame
         # Returns a string to show the word being guessed and missing letters as _ characters.
         return @guess_board.join(" ")
     end
+
+    def reset_guess_word
+        # nil -> nil
+        # Sets @guess_word to []
+        
+        @guess_word = []
+    end
+
+    def reset_guess_board
+        # nil -> nil
+        # Sets @guess_board to []
+        
+        @guess_board = []
+    end
+
+    def reset_used_letters
+        # nil -> nil
+        # Sets @used_letters to []
+        
+        @used_letters = []
+    end
+
+    def reset_mistake_count
+        # nil -> nil
+        # Sets @mistakes to 0
+        
+        @mistakes = 0
+    end
+
 
     # Private methods start here
     private
@@ -158,6 +193,33 @@ class HangmanGame
         
     end
 
+    def is_single_letter? (entry_string)
+        # any -> bool
+        # Checks if the entered object is a string
+        # containing a single letter
+
+        # Check if entry is a string of length 1 and not a digit
+        if (entry_string.class == String) && (entry_string.length == 1) && !is_digit?(entry_string)
+            return true
+        else
+            return false
+        end
+    end
+
+
     # SECTION END
 
+end
+
+hangman = HangmanGame.new()
+hangman.set_new_word()
+puts "Guess word: #{hangman.get_guess_word}"
+letter_array = ["a", "e", "i", "o", "u"]
+letter_array.each do |letter|
+    puts "Using letter #{letter}"
+    hangman.add_guess(letter)
+    puts "Guesses: #{hangman.get_guesses}"
+    puts "Guess Board: #{hangman.get_guess_board}"
+    puts "Mistakes: #{hangman.mistakes}"
+    puts "--------------------------------"
 end
