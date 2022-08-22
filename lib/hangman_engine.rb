@@ -10,12 +10,16 @@ class HangmanGame
         @guess_board = []
         @used_letters = []
         @mistakes = 0
+        @mistakes_allowed = 6
         # Notes the range of word lengths in the already existing wordbank
-        @lower_letter_range = 0
-        @upper_letter_range = 0
+        @lower_letter_range = 5
+        @upper_letter_range = 12
     end
 
     attr_reader :mistakes
+    attr_reader :mistakes_allowed
+    attr_reader :lower_letter_range
+    attr_reader :upper_letter
 
     def set_new_word (lower_word_length=5, upper_word_length=12)
         # int, int -> nil
@@ -32,6 +36,22 @@ class HangmanGame
         # Sets the game board as _ for each letter to be guessed by default
         @guess_board = Array.new(random_word.length, "_")
     
+    end
+
+    def set_game_state(set_guess_word, set_guess_board, set_used_letters,
+        set_mistakes, set_mistakes_allowed,
+         set_lower_letter_range=5, set_upper_letter_range=12)
+        # array, array, array, int, int, int -> nil
+        # Set all existing attributes of the hangman game.
+        # Note: this is used to load games.
+
+        @guess_word = set_guess_word
+        @guess_board = set_guess_board
+        @used_letters = set_used_letters
+        @mistakes = set_mistakes
+        @mistakes_allowed = set_mistakes_allowed
+        @lower_letter_range = set_lower_letter_range
+        @upper_letter_range = set_upper_letter_range
     end
 
     def add_guess (guess_letter)
@@ -86,11 +106,34 @@ class HangmanGame
         return @guess_board.join(" ")
     end
 
+    def get_game_state
+        # nil -> hash
+        # Returns a has of all attributes and their values.
+        # Note: used to save game state.
+
+        hangman_data = {
+            guess_word: @guess_word,
+            guess_board: @guess_board,
+            used_letters: @used_letters,
+            mistakes: @mistakes,
+            mistakes_allowed: @mistakes_allowed,
+            lower_letter_range: @lower_letter_range,
+            upper_letter_range: @upper_letter_range
+        }
+    end
+
     def guess_word_found?
         # nil -> bool
         # Checks if the current word on the guess board matches the guess word
 
         @guess_board.join("") == get_guess_word
+    end
+
+    def max_mistakes_made?
+        # nil -> bool
+        # Returns true if mistakes have reached or exceeded mistakes_allowed
+
+        @mistakes == @mistakes_allowed
     end
 
     def reset_guess_word

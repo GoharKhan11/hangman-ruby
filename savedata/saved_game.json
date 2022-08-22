@@ -1,0 +1,26 @@
+{
+  "guess_word": [
+    "a",
+    "r",
+    "t",
+    "h",
+    "u",
+    "r"
+  ],
+  "guess_board": [
+    "a",
+    "_",
+    "_",
+    "_",
+    "_",
+    "_"
+  ],
+  "used_letters": [
+    "a",
+    "e"
+  ],
+  "mistakes": 1,
+  "mistakes_allowed": 6,
+  "lower_letter_range": 5,
+  "upper_letter_range": 12
+}
