@@ -36,6 +36,7 @@ class GameUI
             system "clear"
             continue_saved_game()
         else
+            system "clear"
             puts "Exiting game, bye!"
         end
     end
@@ -100,6 +101,8 @@ class GameUI
         until game_won || exit_game || (@hangman_game_instance.mistakes >= @hangman_game_instance.mistakes_allowed)
             # Show board state before guess
             display_board_state()
+            # Ask for user entry
+            puts "Please enter a response:"
             # Get user entry and handle it
             # stores return value in exit game because it returns true when exit requested
             exit_game = _handle_user_entry()
@@ -237,6 +240,11 @@ class GameUI
                 system "clear"
                 save_game()
                 puts "Game saved!\n"
+                # Show screen after save since we ask for another response
+                display_board_state()
+                # Get a response after saving, the until loop keeps running since
+                # a guess was not added
+                puts "Please enter a response:"
             elsif user_entry == "2"
                 system "clear"
                 puts "Exiting to main menu.\n\n"
